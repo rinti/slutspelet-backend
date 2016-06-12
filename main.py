@@ -1,4 +1,5 @@
 import flask
+from flask.ext.cors import CORS, cross_origin
 import hashlib
 import os
 import random
@@ -9,6 +10,7 @@ from werkzeug.contrib.cache import SimpleCache
 
 app = flask.Flask(__name__)
 cache = SimpleCache()
+cors = CORS(app, resources={'/': {'origins': 'localhost'}})
 
 CALLER_ID = os.environ.get('BOOLI_CALLER_ID')
 API_KEY = os.environ.get('BOOLI_API_KEY')
@@ -43,6 +45,7 @@ def get_total_count():
 
 
 @app.route("/")
+@cross_origin(origin='localhost')
 def main():
     total_count = cache.get('total_count')
     if total_count is None:
